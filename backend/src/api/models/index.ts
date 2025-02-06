@@ -20,6 +20,7 @@ modelsRouter.get("/", async (req: Request, res: Response) => {
 
 modelsRouter.post("/", async (req: Request, res: Response) => {
   const { modelName }: SelectModelRequest = req.body;
+  console.table(req.body);
   const models: OllamaModelsResponse = await listModels();
   const modelNames = models.models.map((model) => model.name);
   if (!modelNames.includes(modelName)) {
