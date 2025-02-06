@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import db from "../../database";
+import { retrieveValue, setKeyValue } from "../../database";
 import { listModels } from "../../service/ollama";
 import { OllamaModelsResponse } from "../../service/ollama/types";
 import { SELECTED_MODEL_NAME_KEY } from "./constants";
@@ -9,13 +9,10 @@ const modelsRouter = express.Router();
 
 modelsRouter.get("/", async (req: Request, res: Response) => {
   const models: OllamaModelsResponse = await listModels();
-  const selectedModel = db
-    .prepare("SELECT * FROM GoodFitKeyValuePairs WHERE key = ?")
-    .get(SELECTED_MODEL_NAME_KEY) as { value: string } | undefined;
-  const selectedModelName = selectedModel ? selectedModel.value : "";
+  const selectedModel = retrieveValue(SELECTED_MODEL_NAME_KEY);
   const modelNames = models.models.map((model) => model.name);
   const response: ListModelsResponse = {
-    selectedModelName,
+    selectedModelName: selectedModel ?? "",
     modelNames,
   };
   res.json(response);
@@ -29,19 +26,7 @@ modelsRouter.post("/", async (req: Request, res: Response) => {
     res.status(400).json({ error: "Invalid model name" });
     return;
   }
-  const curModel = db
-    .prepare("SELECT * FROM GoodFitKeyValuePairs WHERE key = ?")
-    .get(SELECTED_MODEL_NAME_KEY);
-  if (curModel) {
-    db.prepare("UPDATE GoodFitKeyValuePairs SET value = ? WHERE key = ?").run(
-      modelName,
-      SELECTED_MODEL_NAME_KEY
-    );
-  } else {
-    db.prepare(
-      "INSERT INTO GoodFitKeyValuePairs (key, value) VALUES (?, ?)"
-    ).run(SELECTED_MODEL_NAME_KEY, modelName);
-  }
+  setKeyValue(SELECTED_MODEL_NAME_KEY, modelName);
   res.json({ modelName });
 });
 
