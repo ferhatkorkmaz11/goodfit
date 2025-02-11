@@ -11,7 +11,6 @@ const API_URL = import.meta.env.API_URL || "http://localhost:8080";
 
 export async function getCV(): Promise<CV> {
   try {
-    console.log("API_URL:", API_URL);
     const response = await axios.get<CV>(`${API_URL}/cv`);
     return response.data;
   } catch (error) {
@@ -71,7 +70,7 @@ export async function checkJobCompatability(
 ): Promise<CheckJobCompatabilityResponse> {
   try {
     const response = await axios.post<CheckJobCompatabilityResponse>(
-      `${API_URL}/check-job-compatability`,
+      `${API_URL}/jobs/compatibility`,
       checkJobCompatabilityRequest
     );
     return response.data;

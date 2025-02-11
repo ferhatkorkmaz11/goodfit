@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "My Chrome Extension",
+  "name": "GoodF it",
   "version": "1.0",
-  "description": "A simple Chrome extension",
+  "description": "Good Fit, where you can find out if you are a good fit for a job",
   "permissions": ["storage", "activeTab", "scripting"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "action": {
     "default_popup": "index.html",

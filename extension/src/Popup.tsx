@@ -27,6 +27,7 @@ function Popup() {
         console.error("Error fetching models:", error);
       }
     };
+
     fetchCV();
     fetchModels();
   }, []);
@@ -57,15 +58,6 @@ function Popup() {
     }
   };
 
-  const handleModelChange = async () => {
-    if (selectedModel) {
-      try {
-        await pickModel({ modelName: selectedModel });
-      } catch (error) {
-        console.error("Error picking model:", error);
-      }
-    }
-  };
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <h1 className="text-3xl font-semibold text-center mb-8 text-blue-600">
@@ -96,9 +88,14 @@ function Popup() {
           </label>
           <select
             value={selectedModel || ""}
-            onChange={(e) => {
-              setSelectedModel(e.target.value);
-              handleModelChange();
+            onChange={async (e) => {
+              const newModel = e.target.value;
+              setSelectedModel(newModel);
+              try {
+                await pickModel({ modelName: newModel });
+              } catch (error) {
+                console.error("Error picking model:", error);
+              }
             }}
             className="w-full p-3 bg-white text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
           >
