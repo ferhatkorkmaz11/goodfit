@@ -24,6 +24,16 @@ jobRouter.post("/compatibility", async (req: Request, res: Response) => {
 
   let model = retrieveValue(SELECTED_MODEL_NAME_KEY);
   if (!model) {
+    const models = await listModels();
+    if (models.models.length === 0) {
+      res.status(400).send("No models found.");
+      return;
+    }
+    const ollamaModels = models.models.map((model) => {
+      return model.name;
+    });
+    model = ollamaModels[0];
+    setKeyValue(SELECTED_MODEL_NAME_KEY, model);
     res.status(400).send("Model not found.");
     return;
   }
