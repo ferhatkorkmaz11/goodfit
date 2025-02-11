@@ -35,4 +35,5 @@ export interface CheckJobCompatabilityOllamaRequest {
   cv: string;
   jobDescription: string;
   model: string;
+  jobTitle: string;
 }
