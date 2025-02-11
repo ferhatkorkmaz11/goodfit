@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "GoodF it",
+  "name": "Good Fit",
   "version": "1.0",
   "description": "Good Fit, where you can find out if you are a good fit for a job",
   "permissions": ["storage", "activeTab", "scripting"],
@@ -20,7 +20,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://linkedin.com/*"],
       "js": ["content.js"]
     }
   ]
